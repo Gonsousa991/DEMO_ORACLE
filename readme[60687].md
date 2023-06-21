@@ -389,9 +389,11 @@ Answer:
 11. Please have a look into the AWR report (AWR.html) in attachment and let us know what is the problem that the AWR is highlighting and potential solution.
 
 
-Answer: First time i look at a report like this but for what i can search indicate that the corresponding metrics or statistics have exceeded a certain threshold or are outside the expected range.
+Answer: 
 
-For solution maybe Tuning the SQL queries, improving their performance and analyze if the resources of the database are enough in terms of memory and CPU allocation for example.
+- First time i look at a report like this but for what i can search indicate that the corresponding metrics or statistics have exceeded a certain threshold or are outside the expected range.
+
+- For solution maybe Tuning the SQL queries, improving their performance and analyze if the resources of the database are enough in terms of memory and CPU allocation for example.
 
 
 
