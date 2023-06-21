@@ -129,19 +129,20 @@ Answer:
 
 
 5. Create a new table that associates user to existing dept(s)
-Answer:
 
-    create table DEPTS(
-        Dept varchar2(25) not null,    
-        Dept_desc varchar2(25) not null
-    );
-    
-    create table Users_APP(
-        User_app number(4) not null,    
-        Name varchar2(25) not null,
-        Dept varchar2(25) not null
-    
-    );
+--Answer:
+
+        create table DEPTS(
+            Dept varchar2(25) not null,    
+            Dept_desc varchar2(25) not null
+        );
+        
+        create table Users_APP(
+            User_app number(4) not null,    
+            Name varchar2(25) not null,
+            Dept varchar2(25) not null
+        
+        );
 
 --We can also create a table to manage this connections like Depts_Users_Con that have an id, the Dept and User_app values.
 
