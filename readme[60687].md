@@ -100,9 +100,10 @@ Answer:
 2. Your suggestion for table data management and data access considering the application usage
 
 Answer:
--Normalize the data in all tables
--Partition the tables if they contain a lot of rows with the correct partition key
--Indexing the columns that are used frequently in the where clause 
+
+-Normalize the data in all tables.
+-Partition the tables if they contain a lot of rows with the correct partition key.
+-Indexing the columns that are used frequently in the where clause. 
 
 
 
