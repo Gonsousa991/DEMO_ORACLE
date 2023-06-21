@@ -66,6 +66,7 @@ Item loc stock an hand represents a snapshot table of stock in a specific moment
 1. Primary key definition and any other constraint or index suggestion
 
 Answer:
+
     alter table "WKSP_ORACLEDEMO"."DEPTS" add constraint
     "DEPTS_CON_PK" primary key ( "DEPT" );
     
