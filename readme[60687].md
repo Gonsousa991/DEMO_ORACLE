@@ -67,9 +67,7 @@ Item loc stock an hand represents a snapshot table of stock in a specific moment
 
 Answer:
 
-    alter table "WKSP_ORACLEDEMO"."DEPTS" add constraint
-    "DEPTS_CON_PK" primary key ( "DEPT" );
-    
+   
     alter table "WKSP_ORACLEDEMO"."ITEM" add constraint
     "ITEM_CON" primary key ( "ITEM" );
     
@@ -86,6 +84,10 @@ Answer:
     "ITEM_LOC_SOH_PK" primary key ( "ITEM", "LOC", "DEPT" );
     
     CREATE INDEX idx_item_loc_soh_dept ON item_loc_soh(dept);
+
+    alter table "WKSP_ORACLEDEMO"."DEPTS" add constraint
+    "DEPTS_CON_PK" primary key ( "DEPT" );
+    
 
 --If this will be used a lot in the where clause we can also create this:
 
