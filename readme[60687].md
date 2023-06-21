@@ -66,25 +66,25 @@ Item loc stock an hand represents a snapshot table of stock in a specific moment
 1. Primary key definition and any other constraint or index suggestion
 
 Answer:
-alter table "WKSP_ORACLEDEMO"."DEPTS" add constraint
-"DEPTS_CON_PK" primary key ( "DEPT" );
-
-alter table "WKSP_ORACLEDEMO"."ITEM" add constraint
-"ITEM_CON" primary key ( "ITEM" );
-
-alter table "WKSP_ORACLEDEMO"."LOC" add constraint
-"LOC_CON" primary key ( "LOC" );
-
-alter table "WKSP_ORACLEDEMO"."ITEM_LOC_SOH" add constraint
-"ITEM_LOC_SOH_FK_ITEM" foreign key ( "ITEM" ) references "ITEM" ( "ITEM" );
-
-alter table "WKSP_ORACLEDEMO"."ITEM_LOC_SOH" add constraint
-"ITEM_LOC_SOH_LOC_FK" foreign key ( "LOC" ) references "LOC" ( "LOC" );
-
-alter table "WKSP_ORACLEDEMO"."ITEM_LOC_SOH" add constraint
-"ITEM_LOC_SOH_PK" primary key ( "ITEM", "LOC", "DEPT" );
-
-CREATE INDEX idx_item_loc_soh_dept ON item_loc_soh(dept);
+    alter table "WKSP_ORACLEDEMO"."DEPTS" add constraint
+    "DEPTS_CON_PK" primary key ( "DEPT" );
+    
+    alter table "WKSP_ORACLEDEMO"."ITEM" add constraint
+    "ITEM_CON" primary key ( "ITEM" );
+    
+    alter table "WKSP_ORACLEDEMO"."LOC" add constraint
+    "LOC_CON" primary key ( "LOC" );
+    
+    alter table "WKSP_ORACLEDEMO"."ITEM_LOC_SOH" add constraint
+    "ITEM_LOC_SOH_FK_ITEM" foreign key ( "ITEM" ) references "ITEM" ( "ITEM" );
+    
+    alter table "WKSP_ORACLEDEMO"."ITEM_LOC_SOH" add constraint
+    "ITEM_LOC_SOH_LOC_FK" foreign key ( "LOC" ) references "LOC" ( "LOC" );
+    
+    alter table "WKSP_ORACLEDEMO"."ITEM_LOC_SOH" add constraint
+    "ITEM_LOC_SOH_PK" primary key ( "ITEM", "LOC", "DEPT" );
+    
+    CREATE INDEX idx_item_loc_soh_dept ON item_loc_soh(dept);
 
 --If this will be used a lot in the where clause we can also create this:
 
