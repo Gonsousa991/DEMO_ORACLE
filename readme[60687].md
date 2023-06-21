@@ -246,34 +246,34 @@ Answer:
 
 - First create a type:
 
-    CREATE TYPE locs AS OBJECT (
-      loc number,
-      loc_desc VARCHAR2(100)
-    );
+        CREATE TYPE locs AS OBJECT (
+          loc number,
+          loc_desc VARCHAR2(100)
+        );
 
 
 
 - Then the type table:
 
-    CREATE TYPE locs_table AS TABLE OF locs;
-
+        CREATE TYPE locs_table AS TABLE OF locs;
+    
 
 
 - Then the function:
 
-    CREATE OR REPLACE FUNCTION Locs_List
-      RETURN locs_table PIPELINED
-    AS
-      
-    BEGIN
-       FOR loc_rec IN (SELECT loc, loc_desc FROM loc)
-      LOOP
-        PIPE ROW(locs(loc_rec.loc, loc_rec.loc_desc));
-      END LOOP;
-      
-      
-      RETURN;
-    END;
+        CREATE OR REPLACE FUNCTION Locs_List
+          RETURN locs_table PIPELINED
+        AS
+          
+        BEGIN
+           FOR loc_rec IN (SELECT loc, loc_desc FROM loc)
+          LOOP
+            PIPE ROW(locs(loc_rec.loc, loc_rec.loc_desc));
+          END LOOP;
+          
+          
+          RETURN;
+        END;
 
 
 --The query to list the locs : 
