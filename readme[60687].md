@@ -244,7 +244,7 @@ Answer: Don´t understand the question but for data filter mechanism we can use 
 
 Answer:
 
-- First create a type:
+-- First create a type:
 
         CREATE TYPE locs AS OBJECT (
           loc number,
@@ -253,13 +253,13 @@ Answer:
 
 
 
-- Then the type table:
+  --Then the type table:
 
         CREATE TYPE locs_table AS TABLE OF locs;
     
 
 
-- Then the function:
+-- Then the function:
 
         CREATE OR REPLACE FUNCTION Locs_List
           RETURN locs_table PIPELINED
