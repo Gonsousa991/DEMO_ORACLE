@@ -88,9 +88,9 @@ Answer:
 
 --If this will be used a lot in the where clause we can also create this:
 
-CREATE INDEX idx_unit_cost ON item_loc_soh(unit_cost);
-
-CREATE INDEX idx_stock ON item_loc_soh(stock_on_hand);
+    CREATE INDEX idx_unit_cost ON item_loc_soh(unit_cost);
+    
+    CREATE INDEX idx_stock ON item_loc_soh(stock_on_hand);
 
 
 
@@ -117,8 +117,8 @@ Answer: Indexing and Partitioning
 
 Answer:
 
-  CREATE OR REPLACE FORCE EDITIONABLE VIEW "SHOW_REQUIRED_FIELDS" ("ITEM", "LOC", "DEPT", "UNIT_COST", "STOCK_ON_HAND") AS 
-  select "ITEM","LOC","DEPT","UNIT_COST","STOCK_ON_HAND" from item_loc_soh;
+      CREATE OR REPLACE FORCE EDITIONABLE VIEW "SHOW_REQUIRED_FIELDS" ("ITEM", "LOC", "DEPT", "UNIT_COST", "STOCK_ON_HAND") AS 
+      select "ITEM","LOC","DEPT","UNIT_COST","STOCK_ON_HAND" from item_loc_soh;
 
 
 
@@ -127,26 +127,26 @@ Answer:
 5. Create a new table that associates user to existing dept(s)
 Answer:
 
-create table DEPTS(
-    Dept varchar2(25) not null,    
-    Dept_desc varchar2(25) not null
-);
-
-create table Users_APP(
-    User_app number(4) not null,    
-    Name varchar2(25) not null,
-    Dept varchar2(25) not null
-
-);
+    create table DEPTS(
+        Dept varchar2(25) not null,    
+        Dept_desc varchar2(25) not null
+    );
+    
+    create table Users_APP(
+        User_app number(4) not null,    
+        Name varchar2(25) not null,
+        Dept varchar2(25) not null
+    
+    );
 
 --We can also create a table to manage this connections like Depts_Users_Con that have an id, the Dept and User_app values.
 
-create table Depts_Users_Con(
-    ID number not null,    
-    User_app number(4) not null,    
-    Dept varchar2(25) not null
-
-);
+    create table Depts_Users_Con(
+        ID number not null,    
+        User_app number(4) not null,    
+        Dept varchar2(25) not null
+    
+    );
 
 
 
@@ -159,66 +159,66 @@ Answer:
 
 First create the table:
 
-create table item_loc_soh_2(
-item varchar2(25) not null,
-loc number(10) not null,
-dept number(4) not null,
-unit_cost number(20,4) not null,
-stock_on_hand number(12,4) not null,
-stock_value number(12,4) not null
-);
+    create table item_loc_soh_2(
+    item varchar2(25) not null,
+    loc number(10) not null,
+    dept number(4) not null,
+    unit_cost number(20,4) not null,
+    stock_on_hand number(12,4) not null,
+    stock_value number(12,4) not null
+    );
 
 Then the package:
 
-create or replace package "LIB_STOCK" as
-
-Procedure stores_information(p_item varchar2 ,p_dept number , p_loc number, p_all varchar2 default 'NO');
-
-end "LIB_STOCK";
-/
-
-create or replace package body "LIB_STOCK" as
-
-
-  procedure stores_information(p_item varchar2 ,p_dept number , p_loc number, p_all varchar2 )
-  is
-    v_item varchar2(50);
-    v_loc number;
-    v_dept number;
-    v_unit_cost number;
-    v_stock number;
-    v_stock_value number;
-  begin
-
-If p_all = 'NO' then
-
-select item, loc, dept, unit_cost, stock_on_hand, (unit_cost*stock_on_hand) 
-into v_item, v_loc, v_dept, v_unit_cost, v_stock, v_stock_value 
-from item_loc_soh
-  where item=p_item
-        and dept= p_dept
-        and loc = p_loc;
-
-
-  insert into item_loc_soh_2(item, loc, dept, unit_cost, stock_on_hand, stock_value) values
-  (v_item, v_loc, v_dept, v_unit_cost, v_stock, v_stock_value );
-
-
-  elsif p_all= 'ALL' then 
-
-  for i in (select item, loc, dept, unit_cost, stock_on_hand from item_loc_soh)
-
-  loop
-
-insert into item_loc_soh_2(item, loc, dept, unit_cost, stock_on_hand, stock_value) values
-  (i.item, i.loc, i.dept, i.unit_cost, i.stock_on_hand, (i.unit_cost*i.stock_on_hand)  );
-
-
-  end loop;
-  end if;
-  end;
-end "LIB_STOCK";
-/
+    create or replace package "LIB_STOCK" as
+    
+    Procedure stores_information(p_item varchar2 ,p_dept number , p_loc number, p_all varchar2 default 'NO');
+    
+    end "LIB_STOCK";
+    /
+    
+    create or replace package body "LIB_STOCK" as
+    
+    
+      procedure stores_information(p_item varchar2 ,p_dept number , p_loc number, p_all varchar2 )
+      is
+        v_item varchar2(50);
+        v_loc number;
+        v_dept number;
+        v_unit_cost number;
+        v_stock number;
+        v_stock_value number;
+      begin
+    
+    If p_all = 'NO' then
+    
+    select item, loc, dept, unit_cost, stock_on_hand, (unit_cost*stock_on_hand) 
+    into v_item, v_loc, v_dept, v_unit_cost, v_stock, v_stock_value 
+    from item_loc_soh
+      where item=p_item
+            and dept= p_dept
+            and loc = p_loc;
+    
+    
+      insert into item_loc_soh_2(item, loc, dept, unit_cost, stock_on_hand, stock_value) values
+      (v_item, v_loc, v_dept, v_unit_cost, v_stock, v_stock_value );
+    
+    
+      elsif p_all= 'ALL' then 
+    
+      for i in (select item, loc, dept, unit_cost, stock_on_hand from item_loc_soh)
+    
+      loop
+    
+    insert into item_loc_soh_2(item, loc, dept, unit_cost, stock_on_hand, stock_value) values
+      (i.item, i.loc, i.dept, i.unit_cost, i.stock_on_hand, (i.unit_cost*i.stock_on_hand)  );
+    
+    
+      end loop;
+      end if;
+      end;
+    end "LIB_STOCK";
+    /
 
 --If pass the value 'ALL' it is created on the other table with all values.
 
@@ -241,40 +241,40 @@ Answer:
 
 --First create a type:
 
-CREATE TYPE locs AS OBJECT (
-  loc number,
-  loc_desc VARCHAR2(100)
-);
+    CREATE TYPE locs AS OBJECT (
+      loc number,
+      loc_desc VARCHAR2(100)
+    );
 
 
 
 - Then the type table:
 
-CREATE TYPE locs_table AS TABLE OF locs;
+    CREATE TYPE locs_table AS TABLE OF locs;
 
 
 
 --Then the function:
 
-CREATE OR REPLACE FUNCTION Locs_List
-  RETURN locs_table PIPELINED
-AS
-  
-BEGIN
-   FOR loc_rec IN (SELECT loc, loc_desc FROM loc)
-  LOOP
-    PIPE ROW(locs(loc_rec.loc, loc_rec.loc_desc));
-  END LOOP;
-  
-  
-  RETURN;
-END;
+    CREATE OR REPLACE FUNCTION Locs_List
+      RETURN locs_table PIPELINED
+    AS
+      
+    BEGIN
+       FOR loc_rec IN (SELECT loc, loc_desc FROM loc)
+      LOOP
+        PIPE ROW(locs(loc_rec.loc, loc_rec.loc_desc));
+      END LOOP;
+      
+      
+      RETURN;
+    END;
 
 
 --The query to list the locs : 
 
-select * from table(locs_list)
-
+    select * from table(locs_list)
+    
 
 
 
@@ -317,65 +317,65 @@ Answer:
 
 --Another way to make it
 
-PROCEDURE stores_information2 (
-  p_item  VARCHAR2,
-  p_dept  NUMBER,
-  p_loc   NUMBER,
-  p_all   VARCHAR2
-) IS
-  TYPE item_loc_soh_type IS TABLE OF item_loc_soh%ROWTYPE;
-  v_item_loc_soh   item_loc_soh_type;
-  
-BEGIN
-  IF p_all = 'NO' THEN
-    SELECT item, loc, dept, unit_cost, stock_on_hand
-    BULK COLLECT INTO v_item_loc_soh
-    FROM item_loc_soh
-    WHERE item = p_item
-      AND dept = p_dept
-      AND loc = p_loc;
-
-    FORALL i IN 1..v_item_loc_soh.COUNT
-      INSERT INTO item_loc_soh_2 (item, loc, dept, unit_cost, stock_on_hand, stock_value)
-      VALUES (v_item_loc_soh(i).item, v_item_loc_soh(i).loc, v_item_loc_soh(i).dept,
-              v_item_loc_soh(i).unit_cost, v_item_loc_soh(i).stock_on_hand,
-              v_item_loc_soh(i).unit_cost * v_item_loc_soh(i).stock_on_hand);
-
-  ELSIF p_all = 'ALL' THEN
-    SELECT item, loc, dept, unit_cost, stock_on_hand
-    BULK COLLECT INTO v_item_loc_soh
-    FROM item_loc_soh;
-
-    FORALL i IN 1..v_item_loc_soh.COUNT
-      INSERT INTO item_loc_soh_2 (item, loc, dept, unit_cost, stock_on_hand, stock_value)
-      VALUES (v_item_loc_soh(i).item, v_item_loc_soh(i).loc, v_item_loc_soh(i).dept,
-              v_item_loc_soh(i).unit_cost, v_item_loc_soh(i).stock_on_hand,
-              v_item_loc_soh(i).unit_cost * v_item_loc_soh(i).stock_on_hand);
-  END IF;
-END;
+    PROCEDURE stores_information2 (
+      p_item  VARCHAR2,
+      p_dept  NUMBER,
+      p_loc   NUMBER,
+      p_all   VARCHAR2
+    ) IS
+      TYPE item_loc_soh_type IS TABLE OF item_loc_soh%ROWTYPE;
+      v_item_loc_soh   item_loc_soh_type;
+      
+    BEGIN
+      IF p_all = 'NO' THEN
+        SELECT item, loc, dept, unit_cost, stock_on_hand
+        BULK COLLECT INTO v_item_loc_soh
+        FROM item_loc_soh
+        WHERE item = p_item
+          AND dept = p_dept
+          AND loc = p_loc;
+    
+        FORALL i IN 1..v_item_loc_soh.COUNT
+          INSERT INTO item_loc_soh_2 (item, loc, dept, unit_cost, stock_on_hand, stock_value)
+          VALUES (v_item_loc_soh(i).item, v_item_loc_soh(i).loc, v_item_loc_soh(i).dept,
+                  v_item_loc_soh(i).unit_cost, v_item_loc_soh(i).stock_on_hand,
+                  v_item_loc_soh(i).unit_cost * v_item_loc_soh(i).stock_on_hand);
+    
+      ELSIF p_all = 'ALL' THEN
+        SELECT item, loc, dept, unit_cost, stock_on_hand
+        BULK COLLECT INTO v_item_loc_soh
+        FROM item_loc_soh;
+    
+        FORALL i IN 1..v_item_loc_soh.COUNT
+          INSERT INTO item_loc_soh_2 (item, loc, dept, unit_cost, stock_on_hand, stock_value)
+          VALUES (v_item_loc_soh(i).item, v_item_loc_soh(i).loc, v_item_loc_soh(i).dept,
+                  v_item_loc_soh(i).unit_cost, v_item_loc_soh(i).stock_on_hand,
+                  v_item_loc_soh(i).unit_cost * v_item_loc_soh(i).stock_on_hand);
+      END IF;
+    END;
 
 
 
 -- Another way is to generate an id for the table item_loc_soh and we can do it as following:
 
 
-CREATE OR REPLACE PACKAGE lib_stock IS
-  PROCEDURE stores_information3(p_item_loc_soh_id IN item_loc_soh.item_loc_soh_id%TYPE DEFAULT NULL);
-END lib_stock;
-/
-
-CREATE OR REPLACE PACKAGE BODY lib_stock IS
-  PROCEDURE stores_information3(p_item_loc_soh_id IN item_loc_soh.item_loc_soh_id%TYPE DEFAULT NULL) IS
-  BEGIN
-    INSERT INTO item_loc_soh_2 (item, loc, dept, unit_cost, stock_on_hand, stock_value)
-    SELECT item, loc, dept, unit_cost, stock_on_hand, (unit_cost * stock_on_hand) AS stock_value
-    FROM item_loc_soh
-
--- If is null will get 'all' otherwise get the store with the id that is passed as argument in the procedure
-    WHERE p_item_loc_soh_id IS NULL OR item_loc_soh_id = p_item_loc_soh_id;
-  END stores_information3;
-END lib_stock;
-/
+    CREATE OR REPLACE PACKAGE lib_stock IS
+      PROCEDURE stores_information3(p_item_loc_soh_id IN item_loc_soh.item_loc_soh_id%TYPE DEFAULT NULL);
+    END lib_stock;
+    /
+    
+    CREATE OR REPLACE PACKAGE BODY lib_stock IS
+      PROCEDURE stores_information3(p_item_loc_soh_id IN item_loc_soh.item_loc_soh_id%TYPE DEFAULT NULL) IS
+      BEGIN
+        INSERT INTO item_loc_soh_2 (item, loc, dept, unit_cost, stock_on_hand, stock_value)
+        SELECT item, loc, dept, unit_cost, stock_on_hand, (unit_cost * stock_on_hand) AS stock_value
+        FROM item_loc_soh
+    
+    -- If is null will get 'all' otherwise get the store with the id that is passed as argument in the procedure
+        WHERE p_item_loc_soh_id IS NULL OR item_loc_soh_id = p_item_loc_soh_id;
+      END stores_information3;
+    END lib_stock;
+    /
 
 
 
@@ -400,45 +400,45 @@ Answer:
 
 -- Create directory object 
 
-CREATE DIRECTORY output_dir AS '<Output Directory>'; 
+    CREATE DIRECTORY output_dir AS '<Output Directory>'; 
 
 
 -- Create the logic to generate a file for location
 
-DECLARE
-  CURSOR c_locations IS
-    SELECT DISTINCT loc FROM loc; 
+    DECLARE
+      CURSOR c_locations IS
+        SELECT DISTINCT loc FROM loc; 
+        
+      v_file UTL_FILE.file_type;
     
-  v_file UTL_FILE.file_type;
-
-BEGIN
-  FOR rec IN c_locations LOOP
-    -- Open the file for writing ( will have one file per location dynamically)
-    v_file := UTL_FILE.fopen('OUTPUT_DIR', 'location_' || rec.loc || '.csv', 'w', 32767);
-
-    -- Write header 
-    UTL_FILE.put_line(v_file, 'Item,Department,Unit Cost,Stock Quantity,Stock Value');
-
-    -- Fetch data and write to the file for the one location at a time
-    FOR item_rec IN (SELECT item, dept, unit_cost, stock_on_hand, stock_value
-                     FROM item_loc_soh_2
-                     WHERE loc = rec.loc) LOOP
-      UTL_FILE.put_line(v_file,
-                        item_rec.item || ',' ||
-                        item_rec.dept || ',' ||
-                        item_rec.unit_cost || ',' ||
-                        item_rec.stock_on_hand || ',' ||
-                        item_rec.stock_value);
-    END LOOP;
-
-    -- Close the file
-    UTL_FILE.fclose(v_file);
-  END LOOP;
-  
-  
-EXCEPTION
-  WHEN OTHERS THEN
-    DBMS_OUTPUT.PUT_LINE('An Error has occurred during data extraction: ' || SQLERRM);
-END;
-/
+    BEGIN
+      FOR rec IN c_locations LOOP
+        -- Open the file for writing ( will have one file per location dynamically)
+        v_file := UTL_FILE.fopen('OUTPUT_DIR', 'location_' || rec.loc || '.csv', 'w', 32767);
+    
+        -- Write header 
+        UTL_FILE.put_line(v_file, 'Item,Department,Unit Cost,Stock Quantity,Stock Value');
+    
+        -- Fetch data and write to the file for the one location at a time
+        FOR item_rec IN (SELECT item, dept, unit_cost, stock_on_hand, stock_value
+                         FROM item_loc_soh_2
+                         WHERE loc = rec.loc) LOOP
+          UTL_FILE.put_line(v_file,
+                            item_rec.item || ',' ||
+                            item_rec.dept || ',' ||
+                            item_rec.unit_cost || ',' ||
+                            item_rec.stock_on_hand || ',' ||
+                            item_rec.stock_value);
+        END LOOP;
+    
+        -- Close the file
+        UTL_FILE.fclose(v_file);
+      END LOOP;
+      
+      
+    EXCEPTION
+      WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An Error has occurred during data extraction: ' || SQLERRM);
+    END;
+    /
 
